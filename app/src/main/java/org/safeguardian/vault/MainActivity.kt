@@ -81,7 +81,7 @@ class MainActivity : Activity() {
         }
 
     private fun render() {
-        root = column().apply { setBackgroundColor(background) }
+        root = column().apply { setBackgroundColor(this@MainActivity.background) }
         setContentView(root)
 
         val top = row().apply { setPadding(dp(20), dp(20), dp(20), dp(16)) }
@@ -91,7 +91,7 @@ class MainActivity : Activity() {
         top.addView(txt("●  LOCAL", 10f, mint, true))
         root.addView(top)
 
-        val scroller = ScrollView(this).apply { fillViewport = true }
+        val scroller = ScrollView(this).apply { isFillViewport = true }
         root.addView(scroller, LinearLayout.LayoutParams(-1, 0, 1f))
         val body = column().apply { setPadding(dp(20), dp(7), dp(20), dp(22)) }
         scroller.addView(body)
