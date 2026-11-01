@@ -442,8 +442,8 @@ class MainActivity : FragmentActivity() {
         val website = input("Сайт / домен", existing.optString("site"))
         val app = input("Android package (для Autofill)", existing.optString("package"))
         val login = input("Логин", existing.optString("login"))
-        val password = input("Пароль", existing.optString("password"))
-        val totp = input("TOTP: Base32 или otpauth://", existing.optString("totp"))
+        val password = input("Пароль", existing.optString("password"), secret = true)
+        val totp = input("TOTP: Base32 или otpauth://", existing.optString("totp"), secret = true)
         val note = input("Дополнительная заметка", existing.optString("notes"), lines = true)
         listOf(name, website, app, login, password).forEach { add(form, it) }
         add(form, button("⚄  Сгенерировать пароль") {
