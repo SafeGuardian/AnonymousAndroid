@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
   <application
       android:label="SafeGuardian"
       android:theme="@android:style/Theme.Material.NoActionBar"
       android:allowBackup="false"
+      android:fullBackupContent="false"
       android:usesCleartextTraffic="false"
       android:supportsRtl="true">
     <activity
@@ -15,5 +17,20 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+    <activity
+        android:name=".AutofillUnlockActivity"
+        android:exported="false"
+        android:theme="@android:style/Theme.Material.NoActionBar"
+        android:windowSoftInputMode="adjustResize"/>
+    <service
+        android:name=".GuardianAutofillService"
+        android:permission="android.permission.BIND_AUTOFILL_SERVICE"
+        android:exported="true"
+        android:label="SafeGuardian Autofill">
+      <intent-filter>
+        <action android:name="android.service.autofill.AutofillService"/>
+      </intent-filter>
+      <meta-data android:name="android.autofill" android:resource="@xml/autofill_service"/>
+    </service>
   </application>
 </manifest>
