@@ -144,12 +144,12 @@ class AuthStore(private val context: Context) {
     fun prepareBiometricEnrollment(): Cipher =
         Cipher.getInstance("AES/GCM/NoPadding").apply {
             init(Cipher.ENCRYPT_MODE, biometricKey(true))
-            updateAAD(BIOMETRIC_AAD)
         }
 
     fun finishBiometricEnrollment(cipher: Cipher, masterKey: ByteArray) {
         require(masterKey.size == 32 && initialized)
         val iv = cipher.iv
+        cipher.updateAAD(BIOMETRIC_AAD)
         val sealed = cipher.doFinal(masterKey)
         atomicWrite(biometric, JSONObject().apply {
             put("version", 2)
@@ -165,7 +165,6 @@ class AuthStore(private val context: Context) {
         require(iv.size == 12)
         return Cipher.getInstance("AES/GCM/NoPadding").apply {
             init(Cipher.DECRYPT_MODE, biometricKey(false), GCMParameterSpec(128, iv))
-            updateAAD(BIOMETRIC_AAD)
         }
     }
 
@@ -173,6 +172,7 @@ class AuthStore(private val context: Context) {
         val data = JSONObject(biometric.readText())
         val wrapped = decode(data.getString("wrapped"))
         require(wrapped.size == 48)
+        cipher.updateAAD(BIOMETRIC_AAD)
         val result = cipher.doFinal(wrapped)
         require(result.size == 32)
         return result
